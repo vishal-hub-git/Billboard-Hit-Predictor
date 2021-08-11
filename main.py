@@ -1,18 +1,8 @@
 from flask import Flask, request, render_template
 import pickle
-import re
 import numpy as np
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
 
-data = pd.read_csv("final_data1.csv")
-df_X=data.drop(['billboard_hit','Track','Artist','SpotifyID'],axis=1)
-df_Y=data['billboard_hit']
-from sklearn.model_selection import train_test_split
-X_train,X_test,Y_train,Y_test=train_test_split(df_X, df_Y, test_size=0.2, random_state=101)
-forestVC=RandomForestClassifier(random_state=1,n_estimators=800,max_depth=20,min_samples_split=5,min_samples_leaf = 1,max_features="sqrt")
-forestVC.fit(X_train, Y_train)
-y_predVC2=forestVC.predict(X_test)
+model = pickle.load(open('forest_model1.pkl', 'rb'))
 
 app = Flask(__name__)
 
@@ -44,7 +34,7 @@ def predict_hit():
             Key_mode_ratio=0
         else:
             Key_mode_ratio=float(Key/mode)
-        pred=forestVC.predict([[danceability,energy,loudness,speechiness,acousticness,instrumentalness,liveness,valence,tempo,Key_mode_ratio,duration_ms]])[0]
+        pred=model.predict([[danceability,energy,loudness,speechiness,acousticness,instrumentalness,liveness,valence,tempo,Key_mode_ratio,duration_ms]])[0]
         print(pred)
         if(pred==1):
             return render_template('Result.html', hit='The song will be a Billboard hit.', not_hit='', song_name=song_name)
