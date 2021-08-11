@@ -10,7 +10,7 @@ df_X=data.drop(['billboard_hit','Track','Artist','SpotifyID'],axis=1)
 df_Y=data['billboard_hit']
 from sklearn.model_selection import train_test_split
 X_train,X_test,Y_train,Y_test=train_test_split(df_X, df_Y, test_size=0.2, random_state=101)
-forestVC=RandomForestClassifier(random_state=1,n_estimators=950,max_depth=20,min_samples_split=5,min_samples_leaf = 1,max_features="sqrt")
+forestVC=RandomForestClassifier(random_state=1,n_estimators=800,max_depth=20,min_samples_split=5,min_samples_leaf = 1,max_features="sqrt")
 forestVC.fit(X_train, Y_train)
 y_predVC2=forestVC.predict(X_test)
 
